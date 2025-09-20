@@ -110,3 +110,37 @@ scard likes:posting:1
 
 # 좋아요 눌렀는지 안눌렀는지 확인
 sismember likes:posting:1 member1
+
+# zset : sorted set
+# add하는 scoref르 부여하고, score를 기준으로 정렬
+zadd memberlist 3 member1
+zadd memberlist 4 member2
+zadd memberlist 1 member3
+zadd memberlist 2 member4
+
+# 조회방법 : 기본적으로 score 기준 오름차순 정렬
+zrange memberlist 0 -1
+
+# 내림차순 정렬
+zrevrange memberlist 0 -1
+
+# zset 요소 삭제
+zrem memberlist member42
+
+# zrank : 특정 멤버가 몇번째 순서인지 출력 (오름차순 기준)
+zrank memberlist member1
+
+# redis zset 활용 : 최근 본 상품목록
+# zset을 활용해서 최근시간순으로 score를 설정하여 정렬
+zadd recent:products 151930 pineapple
+zadd recent:products 152030 banana
+zadd recent:products 152130 orange
+zadd recent:products 152230 apple
+# zset도 set이므로 같은 상품을 add할 경우에 시간만 업데이트 되고 중복이 제거
+zadd recent:products 152330 apple
+
+# 최근 본 상품 목록 3개 조회
+zrevrange recent:products 0 2
+
+# score까지 포함하여 조회
+zrevrange recent:products 0 -1 withscores
