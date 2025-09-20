@@ -26,3 +26,15 @@ del user:email:1
 # 현재 DB 내 모든 key 삭제
 flushdb
 
+# redis 활용 : 좋아요 기능 구현
+set likes:posting:1 0
+incr likes:posting:1 # 특정 key값의 value를 1만큼 증가
+decr likes:posting:1 # 특정 key값의 value를 1만큼 감소
+get likes:posting:1
+
+# redis 활용 : 재고관리
+set stocks:proudct:1 100
+decr stocks:product:1
+get stocks:product:1
+
+# redis 활용 : 캐시(임시저장) 기능 구현
