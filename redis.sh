@@ -144,3 +144,40 @@ zrevrange recent:products 0 2
 
 # score까지 포함하여 조회
 zrevrange recent:products 0 -1 withscores
+
+# hash : map 형태의 자료구조, value값이 {key:value, key:value ...} 형태로 구성
+hset member:info:1 name hong email hong@naver.com age 30
+
+# 특정 요소 조회
+hget member:info:1 email
+
+# 모든 요소값 조회
+hgetall member:info:1
+
+# 특정 요소값만 수정
+hset member:info:1 name kim
+
+# 특정 요소값의 값을 증가/감소 시킬 경우
+hincrby member:info:1 age 3
+hincrby member:info:1 age -3
+
+# redis hash 활용 예시 : 빈번하게 변경되는 객체값 캐싱
+# json형태의 문자열로 캐싱을 할 경우, 해당 문자값을 수정할 때에는 문자열을 파싱하여 통째로 변경해야 함
+
+# redis pub sub 실습 : 데이터 ㅅ실시간으로 subscribe, 데이터가 저장되지 않음.
+# pub/sub 기능은 멀티 서버 환경에서 채팅, 알림 등의 서비스를 구현할 때 많이 사용
+# 터미널 2,3 실행
+subscribe test_channel
+
+# 터미널 1 실행
+publish test_channel "hello, this is a test message"
+
+# redis stream 실습 : 데이터 실시간으로 read, 데이터가 저장
+# * : ID값 자동 생성
+xadd test_stream * message "hello this is stream message"
+
+# $: 현재 마지막 메시지 이후에 오는 새 메시지를 의미
+xread block 20000 streams test_stream $
+
+# 전체 메시지 조회
+xrange test_stream - +
